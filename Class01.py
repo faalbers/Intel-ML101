@@ -12,46 +12,60 @@ def main():
     data = pd.read_csv(filepath)
 
     # Data head
+    print('\nResult: data.head()')
     print(data.head())
 
     # Number of rows
+    print('\nresult: data.shape[0]')
     print(data.shape[0])
 
     # Column names
+    print('\nResult: data.columns.tolist()')
     print(data.columns.tolist())
 
     # Data types
+    print('\nResult: data.dtypes')
     print(data.dtypes)
 
     # Remove front string from species data to just keep species name
     data['species'] = data.species.str.replace('Iris-', '')
     # alternatively
     # data['species'] = data.species.apply(lambda r: r.replace('Iris-', ''))
+    print("\nResult: data.species.str.replace('Iris-', '')")
     print(data.head())
 
     # Count of each species
+    print("\nResult: data['species'].value_counts()")
     print(data['species'].value_counts())
 
     # The mean, median, and quantiles and ranges (max-min) for each petal and
     # sepal measurement.
+    print("\nResult: data.describe().append(pd.Series(range, name='range'))")
     range = data.max(numeric_only=True)-data.min(numeric_only=True)
     print(data.describe().append(pd.Series(range, name='range')))
 
     # The mean of each measurement
+    print("\nResult: data.groupby('species').mean()")
     print(data.groupby('species').mean())
 
     # The median of each of these measurements
+    print("\nResult: data.groupby('species').median()")
     print(data.groupby('species').median())
 
     # Applying multiple functions at once - 2 methods
+    print("\nResult: data.groupby('species').agg(['mean', 'median'])")
     print(data.groupby('species').agg(['mean', 'median']))      # passing a list of recognized strings
-    print(data.groupby('species').agg([np.mean, np.median]))    # passing a list of explicit aggregation functions
+    print("\nResult: data.groupby('species').agg([np.mean, np.median, np.sum])")
+    print(data.groupby('species').agg([np.mean, np.median, np.sum]))    # passing a list of explicit aggregation functions
 
     # If certain fields need to be aggregated differently, we can do:
     agg_dict = {field: ['mean', 'median'] for field in data.columns if field != 'species'}
     agg_dict['petal_length'] = 'max'
+    print("\nResult: aggregated fields dict")
     pprint(agg_dict)
+    print("\nResult: aggregated fields from dict by species")
     pprint(data.groupby('species').agg(agg_dict))
+    return
 
     if False:
         # A simple scatter plot with Matplotlib
